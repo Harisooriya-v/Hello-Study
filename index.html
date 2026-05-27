@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Study</title>
+    <meta name="description" content="Hello Study – your all-in-one study companion with checklists, notes, a scientific calculator, and a scribble pad.">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Auth View -->
+        <div id="auth-view" class="view">
+            <div class="card glass">
+                <img src="logo.png" alt="Hello Study Logo" class="auth-logo">
+                <div id="login-form">
+                    <input type="text" id="login-username" placeholder="Email" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="login-password" placeholder="Password" required>
+                        <button type="button" class="toggle-password" id="toggle-login-pass" tabindex="-1">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                    <button id="login-btn" class="btn-primary">Login</button>
+                    <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+                </div>
+                <div id="register-form" class="hidden">
+                    <input type="text" id="reg-username" placeholder="Username (optional)">
+                    <input type="email" id="reg-email" placeholder="Email" required>
+                    <div class="password-wrapper">
+                        <input type="password" id="reg-password" placeholder="Password" required>
+                        <button type="button" class="toggle-password" id="toggle-reg-pass" tabindex="-1">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                    <button id="register-btn" class="btn-primary">Create Account</button>
+                    <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                </div>
+                <div id="auth-message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Switch User View -->
+        <div id="switch-view" class="view hidden">
+            <div class="card glass">
+                <h1>Switch Account</h1>
+                <div id="accounts-list" class="accounts-list">
+                    <!-- Saved accounts will be injected here -->
+                </div>
+                <button id="add-account-btn" class="btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    Use another account
+                </button>
+            </div>
+        </div>
+
+        <!-- App View -->
+        <div id="app-view" class="view hidden">
+            <header class="glass">
+                <div class="header-content">
+                    <div class="logo-container">
+                        <img src="logo.png" alt="Hello Study Logo" class="app-logo">
+                        <h1>Hello Study</h1>
+                    </div>
+                    <div class="user-info">
+                        <span id="display-username"></span>
+                        <button id="switch-user-btn" class="btn-secondary" data-tooltip="Switch User">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </button>
+                        <button id="logout-btn" class="btn-secondary logout" data-tooltip="Logout">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main>
+                <div class="search-container glass">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="search-input" placeholder="Search checklists and notes...">
+                </div>
+
+                <div class="tabs">
+                    <button id="tab-checklists" class="tab-btn active">Checklists</button>
+                    <button id="tab-notes" class="tab-btn">Notes</button>
+                    <button id="tab-calculator" class="tab-btn">Calculator</button>
+                    <button id="tab-scribble" class="tab-btn">Scribbles</button>
+                </div>
+
+                <!-- Checklist Section -->
+                <div id="checklist-section">
+                    <div class="add-item-container glass">
+                        <div class="add-item-inputs">
+                            <input type="text" id="new-item-title" placeholder="Add a new task...">
+                            <input type="text" id="new-item-notes" placeholder="Add details (optional)...">
+                        </div>
+                        <button id="add-item-btn" class="btn-add">+</button>
+                    </div>
+                    <div id="checklist-container" class="checklist-list"></div>
+                </div>
+
+                <div id="notes-section" class="hidden">
+                    <div class="add-item-container glass note-input-container">
+                        <textarea id="new-note-content" placeholder="Write a new note..."></textarea>
+                        <div id="image-preview-container" class="hidden">
+                            <img id="image-preview" src="" alt="Preview">
+                            <button id="remove-image-btn" class="btn-icon">×</button>
+                        </div>
+                        <div class="note-actions">
+                            <label for="image-upload" class="btn-icon-secondary" title="Add Image">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            </label>
+                            <input type="file" id="image-upload" accept="image/*" class="hidden">
+                            <button id="add-note-btn" class="btn-add">+</button>
+                        </div>
+                    </div>
+                    <div id="notes-container" class="notes-grid"></div>
+                </div>
+
+                <!-- Calculator Section -->
+                <div id="calculator-section" class="hidden">
+                    <div class="calc-card glass">
+                        <div class="calc-screen">
+                            <div id="calc-expr" class="calc-expr"></div>
+                            <div id="calc-output" class="calc-output">0</div>
+                        </div>
+                        <div class="calc-controls">
+                            <div class="trig-mode">
+                                <span id="mode-deg" class="mode-badge active">DEG</span>
+                                <span id="mode-rad" class="mode-badge">RAD</span>
+                            </div>
+                            <button id="calc-history-btn" class="btn-secondary small-btn" title="View History">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </button>
+                        </div>
+                        <div class="calc-grid">
+                            <!-- Row 1: Sci Functions & Clear -->
+                            <button class="calc-btn sci" id="btn-sin">sin</button>
+                            <button class="calc-btn sci" id="btn-cos">cos</button>
+                            <button class="calc-btn sci" id="btn-tan">tan</button>
+                            <button class="calc-btn sci" id="btn-pow">xʸ</button>
+                            <button class="calc-btn op" id="btn-clear">C</button>
+
+                            <!-- Row 2: Sci Functions & Backspace -->
+                            <button class="calc-btn sci" id="btn-log">log</button>
+                            <button class="calc-btn sci" id="btn-ln">ln</button>
+                            <button class="calc-btn sci" id="btn-sqrt">√</button>
+                            <button class="calc-btn sci" id="btn-pi">π</button>
+                            <button class="calc-btn op" id="btn-backspace">⌫</button>
+
+                            <!-- Row 3: Brackets & Division -->
+                            <button class="calc-btn sci" id="btn-open-bracket">(</button>
+                            <button class="calc-btn sci" id="btn-close-bracket">)</button>
+                            <button class="calc-btn sci" id="btn-fact">n!</button>
+                            <button class="calc-btn sci" id="btn-e">e</button>
+                            <button class="calc-btn op" id="btn-div">÷</button>
+
+                            <!-- Row 4: Digits & Operators -->
+                            <button class="calc-btn num" id="btn-7">7</button>
+                            <button class="calc-btn num" id="btn-8">8</button>
+                            <button class="calc-btn num" id="btn-9">9</button>
+                            <button class="calc-btn op" id="btn-mul">×</button>
+                            <button class="calc-btn op" id="btn-sub">-</button>
+
+                            <!-- Row 5: Digits, Add & Equals -->
+                            <button class="calc-btn num" id="btn-4">4</button>
+                            <button class="calc-btn num" id="btn-5">5</button>
+                            <button class="calc-btn num" id="btn-6">6</button>
+                            <button class="calc-btn op" id="btn-add-op">+</button>
+                            <button class="calc-btn equals" id="btn-equals">=</button>
+
+                            <!-- Row 6: Digits & Decimal -->
+                            <button class="calc-btn num" id="btn-1">1</button>
+                            <button class="calc-btn num" id="btn-2">2</button>
+                            <button class="calc-btn num" id="btn-3">3</button>
+                            <button class="calc-btn num" id="btn-0">0</button>
+                            <button class="calc-btn num" id="btn-dot">.</button>
+                        </div>
+                        
+                        <!-- History Dropdown Panel -->
+                        <div id="calc-history-panel" class="calc-history-panel hidden">
+                            <div class="history-header">
+                                <h3>History</h3>
+                                <button id="clear-calc-history" class="btn-delete-small">Clear</button>
+                            </div>
+                            <div id="calc-history-list" class="history-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scribble Section -->
+                <div id="scribble-section" class="hidden">
+                    <div class="scribble-card glass">
+                        <!-- Canvas Viewport -->
+                        <div class="canvas-viewport">
+                            <canvas id="scribble-canvas"></canvas>
+                        </div>
+                        
+                        <!-- Toolbar Controls -->
+                        <div class="scribble-toolbar glass">
+                            <!-- Tool selection buttons -->
+                            <div class="toolbar-group tools">
+                                <button class="tool-btn active" id="tool-pen" title="Pen">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                </button>
+                                <button class="tool-btn" id="tool-eraser" title="Eraser">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H7L3 16l7-7 10 10z"></path><path d="M12 11l5 5"></path></svg>
+                                </button>
+                                <button class="tool-btn" id="tool-line" title="Draw Line">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="19" x2="19" y2="5"></line></svg>
+                                </button>
+                                <button class="tool-btn" id="tool-rect" title="Draw Rectangle">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
+                                </button>
+                                <button class="tool-btn" id="tool-circle" title="Draw Circle">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Brush Size -->
+                            <div class="toolbar-group size-control">
+                                <span class="size-label">Size</span>
+                                <input type="range" id="brush-size" min="1" max="40" value="4">
+                                <span id="brush-size-val" class="size-val">4px</span>
+                            </div>
+
+                            <!-- Colors selection -->
+                            <div class="toolbar-group colors">
+                                <div class="color-dot active" style="background-color: #38bdf8;" data-color="#38bdf8"></div>
+                                <div class="color-dot" style="background-color: #22c55e;" data-color="#22c55e"></div>
+                                <div class="color-dot" style="background-color: #ef4444;" data-color="#ef4444"></div>
+                                <div class="color-dot" style="background-color: #eab308;" data-color="#eab308"></div>
+                                <div class="color-dot" style="background-color: #ec4899;" data-color="#ec4899"></div>
+                                <div class="color-dot" style="background-color: #f8fafc;" data-color="#f8fafc"></div>
+                                <div class="color-custom-container" title="Custom Color">
+                                    <input type="color" id="custom-color" value="#38bdf8">
+                                </div>
+                            </div>
+                            
+                            <!-- Canvas Operations -->
+                            <div class="toolbar-group actions">
+                                <button class="action-btn" id="canvas-undo" title="Undo">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path></svg>
+                                </button>
+                                <button class="action-btn" id="canvas-redo" title="Redo">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"></path><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path></svg>
+                                </button>
+                                <button class="action-btn delete" id="canvas-clear" title="Clear Canvas">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                </button>
+                                <button class="action-btn save" id="canvas-save" title="Save Sketch">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Gallery of Saved Scribbles -->
+                        <div class="scribble-gallery-container glass">
+                            <h3>Saved Scribbles</h3>
+                            <div id="scribble-gallery" class="scribble-gallery">
+                                <p class="message">No saved scribbles yet. Sketch something above and hit save!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <button id="theme-toggle" title="Toggle Light/Dark Mode">
+        <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
