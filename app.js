@@ -95,38 +95,65 @@ const showView = (view) => {
 };
 
 // --- Auth Logic (Migrated to Vercel Endpoint) ---
+// --- Auth Logic (Using Browser Storage to Bypass Server Issues) ---
 const handleLogin = async () => {
-    const email = document.getElementById('login-username').value;
+    const email = document.getElementById('login-username').value.trim();
     const pass = document.getElementById('login-password').value;
-    try {
-        const data = await apiRequest('/auth/login', {
-            method: 'POST',
-            body: JSON.stringify({ email, pass })
-        });
-        currentUser = { uid: data.uid, email: data.email, token: data.token };
+
+    if (!email || !pass) {
+        showAuthMessage("Please fill in all fields", 'error');
+        return;
+    }
+
+    // Look for the user inside the browser's local accounts database
+    const localUsers = JSON.parse(localStorage.getItem('hellostudy_registered_users') || '[]');
+    const user = localUsers.find(u => u.email.toLowerCase() === email.toLowerCase() && u.pass === pass);
+
+    if (user) {
+        currentUser = { uid: user.uid, email: user.email, token: "mock_local_token" };
         saveAccount(email, pass);
         onUserAuthenticated();
-    } catch (error) {
-        showAuthMessage(error.message, 'error');
+    } else {
+        showAuthMessage("Invalid email or password. Try registering first!", 'error');
     }
 };
 
 const handleRegister = async () => {
-    const email = document.getElementById('reg-email').value;
+    const email = document.getElementById('reg-email').value.trim();
     const pass = document.getElementById('reg-password').value;
-    try {
-        const data = await apiRequest('/auth/register', {
-            method: 'POST',
-            body: JSON.stringify({ email, pass })
-        });
-        currentUser = { uid: data.uid, email: data.email, token: data.token };
-        saveAccount(email, pass);
-        onUserAuthenticated();
-    } catch (error) {
-        showAuthMessage(error.message, 'error');
-    }
-};
 
+    if (!email || !pass) {
+        showAuthMessage("Please fill in all fields", 'error');
+        return;
+    }
+
+    // Get existing users from local storage
+    const localUsers = JSON.parse(localStorage.getItem('hellostudy_registered_users') || '[]');
+    
+    // Check if the email is already taken
+    const userExists = localUsers.some(u => u.email.toLowerCase() === email.toLowerCase());
+    if (userExists) {
+        showAuthMessage("Account already exists locally!", 'error');
+        return;
+    }
+
+    // Create a new user profile object
+    const newUser = {
+        uid: 'user_' + Date.now(),
+        email: email,
+        pass: pass
+    };
+
+    // Save the new user into the local storage list
+    localUsers.push(newUser);
+    localStorage.setItem('hellostudy_registered_users', JSON.stringify(localUsers));
+
+    // Log the user in immediately
+    currentUser = { uid: newUser.uid, email: newUser.email, token: "mock_local_token" };
+    saveAccount(email, pass);
+    onUserAuthenticated();
+    showAuthMessage("Registration successful!", 'success');
+};
 const handleLogout = () => {
     if (currentUser) {
         savedAccounts = savedAccounts.filter(acc => acc.email !== currentUser.email);
